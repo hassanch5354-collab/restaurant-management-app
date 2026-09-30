@@ -1,0 +1,135 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Http;
+using System.Web.Http.Cors;
+using WebAPI.Models;
+
+namespace WebAPI.Controllers
+{
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    public class OrderController : ApiController
+    {
+        private RestaurantDbContext db = new RestaurantDbContext();
+
+        // GET: api/Order (Browser mein load hone ke liye zaroori hai)
+        [HttpGet]
+        public IHttpActionResult GetOrders()
+        {
+            try
+            {
+                var result = (from a in db.Orders
+                              join b in db.Customers on a.CustomerID equals b.CustomerID
+                              select new
+                              {
+                                  a.OrderID,
+                                  a.OrderNo,
+                                  Customer = b.Name,
+                                  a.PMethod,
+                                  a.GTotal,
+                                  DeletedOrderItemIDs = ""
+                              }).ToList();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("DB Fetch Error: " + ex.Message);
+            }
+        }
+
+        // GET: api/Order/5
+        [HttpGet]
+        public IHttpActionResult GetOrder(int id)
+        {
+            try
+            {
+                var order = db.Orders.Find(id);
+                var orderDetails = (from a in db.OrderItems
+                                    join b in db.Items on a.ItemID equals b.ItemID
+                                    where a.OrderID == id
+                                    select new
+                                    {
+                                        a.OrderID,
+                                        a.OrderItemID,
+                                        a.ItemID,
+                                        ItemName = b.Name,
+                                        b.Price,
+                                        a.Quantity,
+                                        Total = a.Quantity * b.Price
+                                    }).ToList();
+
+                return Ok(new { order, orderDetails });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // POST: api/Order
+        [HttpPost]
+        public IHttpActionResult PostOrder(Order order)
+        {
+            try
+            {
+                db.Orders.Add(order);
+
+                if (order.OrderItems != null && order.OrderItems.Count > 0)
+                {
+                    foreach (var item in order.OrderItems)
+                    {
+                        item.OrderID = order.OrderID;
+                        db.OrderItems.Add(item);
+                    }
+                }
+
+                db.SaveChanges();
+
+                return Ok(new
+                {
+                    success = true,
+                    savedOrderID = order.OrderID,
+                    orderNo = order.OrderNo,
+                    totalItemsSaved = order.OrderItems != null ? order.OrderItems.Count : 0
+                });
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.InnerException?.InnerException?.Message ?? ex.Message;
+                return BadRequest("Database Save Error: " + msg);
+            }
+        }
+
+        // DELETE: api/Order/5
+        [HttpDelete]
+        public IHttpActionResult DeleteOrder(int id)
+        {
+            try
+            {
+                Order order = db.Orders.Include(y => y.OrderItems).SingleOrDefault(x => x.OrderID == id);
+                if (order == null) return NotFound();
+
+                foreach (var item in order.OrderItems.ToList())
+                {
+                    db.OrderItems.Remove(item);
+                }
+
+                db.Orders.Remove(order);
+                db.SaveChanges();
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) { db.Dispose(); }
+            base.Dispose(disposing);
+        }
+    }
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="76b3c27ad9ee4b5ba31610788d514a2a" Name="Diagram1" ZoomLevel="72">
+        <EntityTypeShape EntityType="RestaurentDBModel.Customer" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurentDBModel.Item" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurentDBModel.Order" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurentDBModel.OrderItem" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="RestaurentDBModel.FK_Order_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurentDBModel.FK_Order_Customer1" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurentDBModel.FK_Order_Customer2" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurentDBModel.FK_OrderItems_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurentDBModel.FK_Order_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurentDBModel.FK_OrderItems_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurentDBModel.FK_OrderItems_OrderItems" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurentDBModel.FK_OrderItems_OrderItems1" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="RestaurentDBModel.User" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="RestaurentDBModel.Permission" Width="1.5" PointX="3.125" PointY="12.125" />
+        <EntityTypeShape EntityType="RestaurentDBModel.Role" Width="1.5" PointX="3.125" PointY="9" />
+        <EntityTypeShape EntityType="RestaurentDBModel.Role_Permission" Width="1.5" PointX="5.375" PointY="9" />
+        <EntityTypeShape EntityType="RestaurentDBModel.UserLog" Width="1.5" PointX="7.625" PointY="9" />
+        <AssociationConnector Association="RestaurentDBModel.FK_RolePermission_Permission" />
+        <AssociationConnector Association="RestaurentDBModel.FK_RolePermission_Role" />
+        <AssociationConnector Association="RestaurentDBModel.FK_Users_Role" />
+        <AssociationConnector Association="RestaurentDBModel.FK__tbl_UserL__UserI__503BEA1C1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RestaurentDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
+    <NavigationProperty Name="Orders1" Relationship="Self.FK_Order_Customer1" FromRole="Customer" ToRole="Order" />
+    <NavigationProperty Name="Orders2" Relationship="Self.FK_Order_Customer2" FromRole="Customer" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="ItemID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Item" FromRole="Item" ToRole="OrderItems" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CustomerID" Type="Int32" />
+    <Property Name="PMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
+    <NavigationProperty Name="Customer1" Relationship="Self.FK_Order_Customer1" FromRole="Order" ToRole="Customer" />
+    <NavigationProperty Name="Customer2" Relationship="Self.FK_Order_Customer2" FromRole="Order" ToRole="Customer" />
+    <NavigationProperty Name="Order1" Relationship="Self.FK_Order_Order" FromRole="Order" ToRole="Order1" />
+    <NavigationProperty Name="Order2" Relationship="Self.FK_Order_Order" FromRole="Order1" ToRole="Order" />
+    <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Order" FromRole="Order" ToRole="OrderItems" />
+    <Property Name="OrderDate" Type="DateTime" Precision="3" />
+    <Property Name="Age" Type="Int32" />
+  </EntityType>
+  <EntityType Name="OrderItem">
+    <Key>
+      <PropertyRef Name="OrderItemID" />
+    </Key>
+    <Property Name="OrderItemID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderID" Type="Int64" />
+    <Property Name="ItemID" Type="Int32" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Item" Relationship="Self.FK_OrderItems_Item" FromRole="OrderItems" ToRole="Item" />
+    <NavigationProperty Name="Order" Relationship="Self.FK_OrderItems_Order" FromRole="OrderItems" ToRole="Order" />
+    <NavigationProperty Name="OrderItems1" Relationship="Self.FK_OrderItems_OrderItems" FromRole="OrderItems" ToRole="OrderItems1" />
+    <NavigationProperty Name="OrderItem1" Relationship="Self.FK_OrderItems_OrderItems" FromRole="OrderItems1" ToRole="OrderItems" />
+    <NavigationProperty Name="OrderItems11" Relationship="Self.FK_OrderItems_OrderItems1" FromRole="OrderItems" ToRole="OrderItems1" />
+    <NavigationProperty Name="OrderItem2" Relationship="Self.FK_OrderItems_OrderItems1" FromRole="OrderItems1" ToRole="OrderItems" />
+  </EntityType>
+  <Association Name="FK_Order_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Customer1">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Customer2">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderItems_Item">
+    <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+    <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="ItemID" />
+      </Principal>
+      <Dependent Role="OrderItems">
+        <PropertyRef Name="ItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Order">
+    <End Role="Order" Type="Self.Order" Multiplicity="1" />
+    <End Role="Order1" Type="Self.Order" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="Order1">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderItems_Order">
+    <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="OrderItems">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderItems_OrderItems">
+    <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="1" />
+    <End Role="OrderItems1" Type="Self.OrderItem" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="OrderItems">
+        <PropertyRef Name="OrderItemID" />
+      </Principal>
+      <Dependent Role="OrderItems1">
+        <PropertyRef Name="OrderItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderItems_OrderItems1">
+    <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="1" />
+    <End Role="OrderItems1" Type="Self.OrderItem" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="OrderItems">
+        <PropertyRef Name="OrderItemID" />
+      </Principal>
+      <Dependent Role="OrderItems1">
+        <PropertyRef Name="OrderItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="RestaurentDBEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="Items" EntityType="Self.Item" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
+    <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Customer1" Association="Self.FK_Order_Customer1">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Customer2" Association="Self.FK_Order_Customer2">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderItems_Item" Association="Self.FK_OrderItems_Item">
+      <End Role="Item" EntitySet="Items" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Order" Association="Self.FK_Order_Order">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="Order1" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderItems_Order" Association="Self.FK_OrderItems_Order">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderItems_OrderItems" Association="Self.FK_OrderItems_OrderItems">
+      <End Role="OrderItems" EntitySet="OrderItems" />
+      <End Role="OrderItems1" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderItems_OrderItems1" Association="Self.FK_OrderItems_OrderItems1">
+      <End Role="OrderItems" EntitySet="OrderItems" />
+      <End Role="OrderItems1" EntitySet="OrderItems" />
+    </AssociationSet>
+    <EntitySet Name="Users" EntityType="RestaurentDBModel.User" />
+    <EntitySet Name="Permissions" EntityType="RestaurentDBModel.Permission" />
+    <EntitySet Name="Roles" EntityType="RestaurentDBModel.Role" />
+    <EntitySet Name="Role_Permission" EntityType="RestaurentDBModel.Role_Permission" />
+    <EntitySet Name="UserLogs" EntityType="RestaurentDBModel.UserLog" />
+    <AssociationSet Name="FK_RolePermission_Permission" Association="RestaurentDBModel.FK_RolePermission_Permission">
+      <End Role="Permission" EntitySet="Permissions" />
+      <End Role="Role_Permission" EntitySet="Role_Permission" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RolePermission_Role" Association="RestaurentDBModel.FK_RolePermission_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="Role_Permission" EntitySet="Role_Permission" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Users_Role" Association="RestaurentDBModel.FK_Users_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK__tbl_UserL__UserI__503BEA1C1" Association="RestaurentDBModel.FK__tbl_UserL__UserI__503BEA1C1">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserLog" EntitySet="UserLogs" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Role_id" Type="Int32" />
+    <NavigationProperty Name="Role1" Relationship="RestaurentDBModel.FK_Users_Role" FromRole="User" ToRole="Role" />
+    <NavigationProperty Name="UserLogs" Relationship="RestaurentDBModel.FK__tbl_UserL__UserI__503BEA1C1" FromRole="User" ToRole="UserLog" />
+  </EntityType>
+  <EntityType Name="Permission">
+    <Key>
+      <PropertyRef Name="Permission_id" />
+    </Key>
+    <Property Name="Permission_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Permission_Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Permission_Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Role_Permission" Relationship="RestaurentDBModel.FK_RolePermission_Permission" FromRole="Permission" ToRole="Role_Permission" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Role_id" />
+    </Key>
+    <Property Name="Role_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Role_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Role_Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Role_Permission" Relationship="RestaurentDBModel.FK_RolePermission_Role" FromRole="Role" ToRole="Role_Permission" />
+    <NavigationProperty Name="Users" Relationship="RestaurentDBModel.FK_Users_Role" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Role_Permission">
+    <Key>
+      <PropertyRef Name="RolePermission_id" />
+    </Key>
+    <Property Name="RolePermission_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Role_id" Type="Int32" Nullable="false" />
+    <Property Name="Permission_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Permission" Relationship="RestaurentDBModel.FK_RolePermission_Permission" FromRole="Role_Permission" ToRole="Permission" />
+    <NavigationProperty Name="Role" Relationship="RestaurentDBModel.FK_RolePermission_Role" FromRole="Role_Permission" ToRole="Role" />
+  </EntityType>
+  <EntityType Name="UserLog">
+    <Key>
+      <PropertyRef Name="LogID" />
+    </Key>
+    <Property Name="LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Token" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ExpiryDateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="User" Relationship="RestaurentDBModel.FK__tbl_UserL__UserI__503BEA1C1" FromRole="UserLog" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_RolePermission_Permission">
+    <End Type="RestaurentDBModel.Permission" Role="Permission" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="RestaurentDBModel.Role_Permission" Role="Role_Permission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Permission">
+        <PropertyRef Name="Permission_id" />
+      </Principal>
+      <Dependent Role="Role_Permission">
+        <PropertyRef Name="Permission_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RolePermission_Role">
+    <End Type="RestaurentDBModel.Role" Role="Role" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="RestaurentDBModel.Role_Permission" Role="Role_Permission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Role_id" />
+      </Principal>
+      <Dependent Role="Role_Permission">
+        <PropertyRef Name="Role_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Users_Role">
+    <End Type="RestaurentDBModel.Role" Role="Role" Multiplicity="0..1" />
+    <End Type="RestaurentDBModel.User" Role="User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Role_id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="Role_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__tbl_UserL__UserI__503BEA1C1">
+    <End Type="RestaurentDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="RestaurentDBModel.UserLog" Role="UserLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserLog">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
