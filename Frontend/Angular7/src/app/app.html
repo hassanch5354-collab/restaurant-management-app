@@ -1,0 +1,66 @@
+<!-- Top Main Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow-sm mb-4" *ngIf="authService.isLoggedIn()">
+  <a class="navbar-brand font-weight-bold" routerLink="/dashboard">Restaurant App</a>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+
+      <!-- 0. Analytics & Sales Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+          <i class="fa fa-tachometer mr-1"></i> Dashboard
+        </a>
+      </li>
+
+      <!-- 1. Orders List -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/orders" routerLinkActive="active"
+          [class.disabled]="!authService.canOrderListView" [attr.aria-disabled]="!authService.canOrderListView"
+          [style.pointer-events]="authService.canOrderListView ? 'auto' : 'none'">
+          <i class="fa fa-list mr-1"></i> Orders List
+        </a>
+      </li>
+
+      <!-- 2. New Order -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/order" routerLinkActive="active"
+          [class.disabled]="!authService.canNewOrderView" [attr.aria-disabled]="!authService.canNewOrderView"
+          [style.pointer-events]="authService.canNewOrderView ? 'auto' : 'none'">
+          <i class="fa fa-plus-circle mr-1"></i> New Order
+        </a>
+      </li>
+
+      <!-- 3. Sales Report -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/sales-report" routerLinkActive="active"
+          [class.disabled]="!authService.canSalesReportView" [attr.aria-disabled]="!authService.canSalesReportView"
+          [style.pointer-events]="authService.canSalesReportView ? 'auto' : 'none'">
+          <i class="fa fa-bar-chart mr-1"></i> Sales Report
+        </a>
+      </li>
+
+    </ul>
+
+    <!-- Right-aligned User Profile and Logout -->
+    <ul class="navbar-nav ml-auto align-items-center">
+      <li class="nav-item mr-3" *ngIf="authService.getUserRole()">
+        <span class="badge badge-info p-2 font-weight-normal">
+          {{ authService.getUserRole() }}
+        </span>
+      </li>
+      <li class="nav-item">
+        <button class="btn btn-outline-danger btn-sm" (click)="authService.logout()">
+          Logout
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Routed Views Container -->
+<div class="container-fluid">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- Floating AI Chatbot Widget -->
+<app-chatbot *ngIf="authService.isLoggedIn()"></app-chatbot>

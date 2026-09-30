@@ -1,0 +1,76 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header bg-dark text-white text-center py-3">
+          <h4 class="mb-0">Restaurant App Login</h4>
+        </div>
+        <div class="card-body p-4">
+          <!-- Error Alert -->
+          <div *ngIf="errorMessage" class="alert alert-danger py-2 mb-3 text-center">
+            {{ errorMessage }}
+          </div>
+
+          <form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
+            <!-- Username Field -->
+            <div class="form-group mb-3">
+              <label class="form-label font-weight-bold">Username</label>
+              <input 
+                type="text" 
+                name="UserName" 
+                #UserName="ngModel" 
+                [(ngModel)]="formModel.UserName" 
+                (input)="errorMessage = ''"
+                class="form-control" 
+                placeholder="Enter username" 
+                required>
+              <small class="text-danger d-block mt-1" *ngIf="UserName.touched && UserName.invalid">Username is required.</small>
+            </div>
+
+            <!-- Password Field with Embedded Eye Icon -->
+            <div class="form-group mb-4">
+              <label class="form-label font-weight-bold">Password</label>
+              <div class="password-field-container">
+                <input 
+                  [type]="showPassword ? 'text' : 'password'" 
+                  name="Password" 
+                  #Password="ngModel" 
+                  [(ngModel)]="formModel.Password" 
+                  (input)="errorMessage = ''"
+                  class="form-control password-input" 
+                  placeholder="Enter password" 
+                  required>
+                
+                <!-- Eye Toggle Button (Clickable Icon) -->
+                <button 
+                  type="button" 
+                  class="eye-icon-btn" 
+                  (click)="showPassword = !showPassword"
+                  tabindex="-1">
+                  
+                  <!-- Exact Eye-Slash Icon -->
+                  <svg *ngIf="!showPassword" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#6c757d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+
+                  <!-- Eye Open Icon (Jab click karein) -->
+                  <svg *ngIf="showPassword" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#0d6efd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+              <small class="text-danger d-block mt-1" *ngIf="Password.touched && Password.invalid">Password is required.</small>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100 py-2 font-weight-bold" [disabled]="form.invalid || isLoading">
+              {{ isLoading ? 'Signing in...' : 'Login' }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

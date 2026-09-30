@@ -1,0 +1,33 @@
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+/* Video ke mutabiq UI styling */
+.jumbotron {
+  padding: 1.5rem 1rem !important;
+  background-color: #e9ecef;
+}
+
+table tr:hover {
+  cursor: pointer;
+}
+
+.table-hover tbody tr:hover td {
+  background-color: rgba(0, 123, 255, 0.075);
+}
+
+.form-control:focus {
+  border-color: #80bdff !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+/* Dialog horizontal scrollbar fix */
+.cdk-overlay-pane {
+  overflow-x: hidden !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  overflow-x: hidden !important;
+  padding: 10px !important;
+}
+.mat-mdc-dialog-container .mdc-dialog__surface .mat-mdc-dialog-content {
+  overflow-x: hidden !important;
+  padding: 10px !important;
+}

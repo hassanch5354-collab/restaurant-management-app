@@ -1,0 +1,38 @@
+.dashboard-container {
+  background-color: #f8f9fa;
+  min-height: 88vh;
+}
+
+.stat-card {
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  background-color: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+.border-left-primary {
+  border-left: 4px solid #1b4332 !important;
+}
+
+.border-left-success {
+  border-left: 4px solid #2d6a4f !important;
+}
+
+.border-left-info {
+  border-left: 4px solid #d4a373 !important;
+}
+
+.border-left-warning {
+  border-left: 4px solid #b78a28 !important;
+}
+
+.chart-box {
+  position: relative;
+  width: 250px;
+  height: 250px;
+}

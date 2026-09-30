@@ -1,0 +1,146 @@
+<div class="container-fluid mt-4 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h3 class="font-weight-bold text-dark mb-0">Sales & Analytical Report</h3>
+      <small class="text-muted">Track revenue performance, order summaries, and top-performing items</small>
+    </div>
+    <div>
+      <button class="btn btn-danger btn-sm shadow-sm" (click)="exportToPDF()">
+        <i class="fa fa-file-pdf-o mr-1"></i> Export as PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter Card -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body bg-light rounded">
+      <div class="form-row align-items-end">
+        <div class="col-md-3">
+          <label class="font-weight-bold small text-secondary">START DATE</label>
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="fromDate">
+        </div>
+        <div class="col-md-3">
+          <label class="font-weight-bold small text-secondary">END DATE</label>
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="toDate">
+        </div>
+        <div class="col-md-4 mt-3 mt-md-0">
+          <button class="btn btn-primary btn-sm px-3 mr-2" (click)="fetchReport()">
+            <i class="fa fa-filter mr-1"></i> Apply Filter
+          </button>
+          <button class="btn btn-secondary btn-sm px-3" (click)="resetFilter()">
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <p class="text-muted mt-2">Loading sales analytics...</p>
+  </div>
+  <!-- Report Body -->
+  <div *ngIf="!loading && salesReportData">
+    <!-- Scenario A: Agar kisi date (jaise 11) ka koi record na ho -->
+    <div *ngIf="salesReportData.TotalOrders === 0" class="text-center py-5 bg-white rounded shadow-sm border mb-4">
+      <i class="fa fa-calendar-times-o fa-3x text-muted mb-3"></i>
+      <h5 class="font-weight-bold text-dark">No Sales Data Found</h5>
+      <p class="text-muted mb-3">No orders were placed in the selected date range.</p>
+      <button class="btn btn-outline-primary btn-sm" (click)="resetFilter()">
+        <i class="fa fa-undo mr-1"></i> View All Time Records
+      </button>
+    </div>
+    <!-- Scenario B: Agar data mojood ho -->
+    <div *ngIf="salesReportData.TotalOrders > 0">
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <div class="card border-0 shadow-sm bg-white border-left-success">
+            <div class="card-body">
+              <h6 class="text-uppercase font-weight-bold text-muted small">Total Gross Revenue</h6>
+              <h2 class="text-success font-weight-bold mb-0">${{ salesReportData.TotalRevenue | number:'1.2-2' }}</h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm bg-white border-left-info">
+            <div class="card-body">
+              <h6 class="text-uppercase font-weight-bold text-muted small">Total Orders Processed</h6>
+              <h2 class="text-info font-weight-bold mb-0">{{ salesReportData.TotalOrders }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Top 5 Items -->
+      <div class="card shadow-sm border-0 mb-4" *ngIf="salesReportData.TopSellingItems?.length > 0">
+        <div class="card-header bg-white font-weight-bold border-bottom">
+          <i class="fa fa-star text-warning mr-2"></i>Top 5 Best-Selling Items
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th>Item Name</th>
+                  <th class="text-center">Units Sold</th>
+                  <th class="text-right">Total Revenue Generated</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of salesReportData.TopSellingItems">
+                  <td><span class="badge badge-pill badge-primary mr-2">Top</span>{{ item.ItemName }}</td>
+                  <td class="text-center font-weight-bold">{{ item.QuantitySold }}</td>
+                  <td class="text-right text-success font-weight-bold">${{ item.TotalSales | number:'1.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Details Table -->
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white font-weight-bold border-bottom">
+          <i class="fa fa-list mr-2"></i>Transaction Details
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Date</th>
+                  <th>Payment Method</th>
+                  <th>Item Description</th>
+                  <th class="text-center">Qty</th>
+                  <th class="text-right">Unit Price</th>
+                  <th class="text-right">Line Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of salesReportData.ReportDetails">
+                  <td class="font-weight-bold">{{ row.OrderNo }}</td>
+                  <td>{{ row.CustomerName || 'Walk-in Customer' }}</td>
+                  <td>{{ row.OrderDate | date:'mediumDate' }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="row.PMethod === 'Cash' ? 'badge-success' : 'badge-info'">
+                      {{ row.PMethod }}
+                    </span>
+                  </td>
+                  <td>{{ row.ItemName }}</td>
+                  <td class="text-center">{{ row.Quantity }}</td>
+                  <td class="text-right">${{ row.Price | number:'1.2-2' }}</td>
+                  <td class="text-right font-weight-bold">${{ row.ItemTotal | number:'1.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
